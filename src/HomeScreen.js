@@ -25,8 +25,7 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 
 
-////////
-
+//////// menu bar in drawer
 import { fade } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
@@ -37,6 +36,12 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 
+//router 
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+
+import Profile from './comp/profile';
+import Product from './comp/product';
 
 
 const drawerWidth = 240;
@@ -268,11 +273,13 @@ export default function HomeScreen() {
    </Menu>
  );
 
-
  ////////////////
 
+ const history = useHistory();
+ const handleHomePage = () => history.push('/');
 
   return (
+    
     <div className={classes.root}>
       <CssBaseline />
       <AppBar
@@ -291,9 +298,9 @@ export default function HomeScreen() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
-            Persistent drawer
-          </Typography>
+            <Typography onClick={handleHomePage} variant="h6" noWrap>
+              Persistent drawer
+            </Typography>
 
 
 {/* //// */}
@@ -375,20 +382,25 @@ export default function HomeScreen() {
         </div>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
+          {['Ethical Wear', 'Western Wear', 'Indo Western', 'Anglo Indian'].map((text, index) => (
+          <Link key={text} to={'/product/'+text}>
+              <ListItem button  >
+                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            </Link>
           ))}
         </List>
         <Divider />
         <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
+          {['Whish List', 'Profile' ].map((text, index) => 
+          (
+          <Link key={text} to={'/profile'}>
             <ListItem button key={text}>
               <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
+            </Link>
           ))}
         </List>
       </Drawer>
@@ -399,13 +411,24 @@ export default function HomeScreen() {
       >
         
         <div className="container">
-            {/* <div className="header"> <HeaderC></HeaderC> </div> */}
-            <div className="content"> <ContentC></ContentC> </div>
-            <div className="footer"> <FooterC></FooterC> </div>
+            <Switch>
+            <Route exact path='/' >
+             <>
+              <div className="content"> <ContentC></ContentC> </div>
+              <div className="footer"> <FooterC></FooterC> </div>
+             </>
+              </Route>
+              <Route exact path='/product/:type?' component={Product} />
+              <Route exact path='/profile' component={Profile} />
+              <Route />
+              {/* <div className="header"> <HeaderC></HeaderC> </div> */}
+              
+            </Switch>
+
+
         </div>
-
-
       </main>
     </div>
+    
   );
 }
